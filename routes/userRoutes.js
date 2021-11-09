@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
       (err, token) => {
         if (err) throw err;
         // setToken(token);
-        res.cookie("token", token).status(200).send(token);
+        res.cookie("token", token).status(200).send("User Created");
       }
     );
   } catch (error) {
@@ -99,9 +99,9 @@ router.put("/", authMiddleware, async (req, res) => {
     const { newUsername, newEmail } = req.body;
 
     // check if email is valid
-    if (!isEmail(email)) return res.status(401).send("Invalid new email");
+    if (!isEmail(newEmail)) return res.status(401).send("Invalid new email");
 
-    await UserModel.findByIdAndUpdate(userId, { username: newUsername, email : newEmail });
+    await UserModel.findByIdAndUpdate(userId, { name: newUsername, email : newEmail.toLowerCase() });
 
     res.status(200).send("Success! User info updated");
   } catch (error) {
